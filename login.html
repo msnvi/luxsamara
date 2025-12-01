@@ -57,30 +57,39 @@ loginForm.addEventListener('submit', (e) => {
     const username = document.getElementById('username').value.trim();
     const password = document.getElementById('password').value;
 
-    const stored = localStorage.getItem(username);
+    // Получаем данные пользователя, сохранённые при регистрации
+    const storedUser = JSON.parse(localStorage.getItem('user'));
 
-    if (!stored) {
+    // Проверка: есть ли вообще зарегистрированный пользователь
+    if (!storedUser) {
         msg.textContent = "Пользователь не найден!";
         msg.style.color = "red";
         return;
     }
 
-    const user = JSON.parse(stored);
-    if (user.password !== password) {
+    // Проверка имени пользователя
+    if (storedUser.username !== username) {
+        msg.textContent = "Имя пользователя неверное!";
+        msg.style.color = "red";
+        return;
+    }
+
+    // Проверка пароля
+    if (storedUser.password !== password) {
         msg.textContent = "Неверный пароль!";
         msg.style.color = "red";
         return;
     }
 
-    localStorage.setItem('activeUser', username);
-    msg.textContent = "Добро пожаловать, " + username + "!";
+    // Успешный вход
+    localStorage.setItem('activeUser', storedUser.username);
+    msg.textContent = "Добро пожаловать, " + storedUser.username + "!";
     msg.style.color = "#003366";
 
-    // Через 1.5 секунды перенаправляем на страницу выбора мастеров
     setTimeout(() => window.location.href = "masterss.html", 1500);
 });
-
 </script>
+
     <footer>
         <div class="container">
             <p>&copy; 2025 Люкс Самара. Все права защищены.</p>
@@ -88,3 +97,4 @@ loginForm.addEventListener('submit', (e) => {
     </footer>
 </body>
 </html>
+
